@@ -1,0 +1,39 @@
+package main
+
+import (
+	"image/color"
+	"math/rand"
+	"time"
+
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/canvas"
+)
+
+func main() {
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Random Color Generator")
+	myWindow.Resize(fyne.NewSize(200, 200))
+
+	content := canvas.NewRectangle(color.White)
+	content.SetMinSize(fyne.NewSize(200, 200))
+
+	myWindow.SetContent(content)
+
+	go generateRandomColor(content)
+
+	myWindow.ShowAndRun()
+}
+
+func generateRandomColor(rect *canvas.Rectangle) {
+	rand.Seed(time.Now().UnixNano())
+
+	for {
+		r, g, b := rand.Intn(256), rand.Intn(256), rand.Intn(256)
+		rect.FillColor = color.RGBA{uint8(r), uint8(g), uint8(b), 0xFF}
+
+		rect.Refresh()
+
+		time.Sleep(time.Second)
+	}
+}
